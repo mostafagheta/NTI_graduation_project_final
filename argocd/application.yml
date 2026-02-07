@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/sohila12/netflix-clone-devsecops-mirror.git
+    repoURL: https://github.com/mostafagheta/NTI_graduation_project_final.git
     targetRevision: main
-    path: Kubernetes
+    path: K8S
   destination:
     server: https://kubernetes.default.svc
     namespace: netflix

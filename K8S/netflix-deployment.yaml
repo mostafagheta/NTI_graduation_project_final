@@ -4,7 +4,7 @@ metadata:
   name: netflix-clone
   namespace: netflix
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: netflix-clone
@@ -22,7 +22,7 @@ spec:
               app: netflix-clone
       containers:
         - name: web
-          image: mostafagheta/netflix-clone:latest
+          image: 141828158518.dkr.ecr.eu-central-1.amazonaws.com/netflix-clone:v1
           ports:
             - containerPort: 80
 
