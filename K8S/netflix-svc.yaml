@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflix-clone-svc
+  namespace: netflix
+  labels:
+    app: netflix-clone
+spec:
+  type: ClusterIP
+  selector:
+    app: netflix-clone
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+

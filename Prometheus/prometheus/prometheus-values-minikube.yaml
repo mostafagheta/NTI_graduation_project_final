@@ -1,0 +1,96 @@
+# Prometheus Configuration for Minikube
+prometheus:
+  prometheusSpec:
+    # Lighter resources for local testing
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    
+    # Shorter retention for local testing
+    retention: 2d
+    
+    # Use emptyDir instead of PVC (no persistence, but works on minikube)
+    storageSpec: {}
+
+# Alertmanager Configuration
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+    # Use emptyDir instead of PVC
+    storage: {}
+
+# Node Exporter
+nodeExporter:
+  enabled: true
+
+# Kube-State-Metrics
+kubeStateMetrics:
+  enabled: true
+
+# Grafana - lighter config
+grafana:
+  enabled: true
+  adminPassword: "admin123"
+  
+  # Lighter resources
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  
+  # No persistence for local testing
+  persistence:
+    enabled: false
+  
+  # Datasources
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-kube-prometheus-prometheus.monitoring:9090
+        access: proxy
+        isDefault: true
+
+# Disable some default rules we don't need for testing
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    etcd: false
+    configReloaders: true
+    general: true
+    k8s: true
+    kubeApiserverAvailability: true
+    kubeApiserverSlos: false
+    kubelet: true
+    kubeProxy: false
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeScheduler: false
+    kubeStateMetrics: true
+    network: true
+    node: true
+    nodeExporterAlerting: true
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true

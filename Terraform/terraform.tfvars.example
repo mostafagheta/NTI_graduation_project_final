@@ -1,0 +1,25 @@
+/*
+ Copy this file to terraform.tfvars (or pass it with -var-file) and fill in
+ the real values for your environment before running `terraform plan` or
+ `terraform apply` from the Terraform root folder.
+
+ Example:
+ cp terraform.tfvars.example terraform.tfvars
+ # edit terraform.tfvars and then:
+ terraform init
+ terraform plan -out=tfplan
+ terraform apply tfplan
+
+ Notes:
+ - Do NOT put secrets in repo if the repository is public. Keep tfvars out of
+   version control or use a secure secrets mechanism.
+ - You can also set environment variables using TF_VAR_<name> to avoid files.
+*/
+
+cluster_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/EXAMPLE"
+vpc_id                    = "vpc-0123456789abcdef0"
+region                    = "eu-central-1"
+
+# Optional values used by this project (replace with real values as needed)
+route53_zone_name         = "marwanalaa.cloud"
+route53_record_name       = "app.marwanalaa.cloud"

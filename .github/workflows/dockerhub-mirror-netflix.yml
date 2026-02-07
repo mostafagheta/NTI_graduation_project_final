@@ -1,0 +1,86 @@
+name: Mirror Netflix Clone Image to DockerHub (Pull → Scan → Push)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/dockerhub-mirror-netflix.yml"
+      - "docs/**"
+      - "README.md"
+
+concurrency:
+  group: dockerhub-mirror-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  SRC_IMAGE: mostafagheta/netflix-clone:latest
+  DEST_IMAGE: sohila11/netflix-clone
+  TRIVY_SEVERITY: "CRITICAL,HIGH"
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set destination tags
+        id: vars
+        run: |
+          echo "TAG_SHA=sha-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+          echo "TAG_DATE=$(date -u +%Y%m%d)" >> $GITHUB_OUTPUT
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull source image
+        run: docker pull "${SRC_IMAGE}"
+
+      - name: Retag for DockerHub
+        run: |
+          docker tag "${SRC_IMAGE}" "${DEST_IMAGE}:latest"
+          docker tag "${SRC_IMAGE}" "${DEST_IMAGE}:${{ steps.vars.outputs.TAG_SHA }}"
+          docker tag "${SRC_IMAGE}" "${DEST_IMAGE}:${{ steps.vars.outputs.TAG_DATE }}"
+
+      - name: Trivy scan (table) - fail on HIGH/CRITICAL
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
+        with:
+          scan-type: image
+          image-ref: ${{ env.DEST_IMAGE }}:latest
+          severity: ${{ env.TRIVY_SEVERITY }}
+          vuln-type: "os,library"
+          ignore-unfixed: true
+          format: table
+          exit-code: "0"
+
+      - name: Trivy scan (SARIF report)
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
+
+        with:
+          scan-type: image
+          image-ref: ${{ env.DEST_IMAGE }}:latest
+          severity: ${{ env.TRIVY_SEVERITY }}
+          vuln-type: "os,library"
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: "0"
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Push to DockerHub
+        run: |
+          docker push "${DEST_IMAGE}:latest"
+          docker push "${DEST_IMAGE}:${{ steps.vars.outputs.TAG_SHA }}"
+          docker push "${DEST_IMAGE}:${{ steps.vars.outputs.TAG_DATE }}"
