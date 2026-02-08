@@ -1,6 +1,12 @@
 <p align="center">
-  <img src="images/logos/nti-logo.png" height="120"/>
+  <img 
+    src="images/logos/v2-logo.jpg"
+    alt="Netflix Clone Banner"
+    style="width: 100%; max-width: 1200px; height: auto;"
+  />
 </p>
+
+
 
 <h1 align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=35&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=900&lines=End-to-End+Netflix+Clone+DevSecOps+Project;GitOps+%2B+AWS+EKS+%2B+ArgoCD;CI%2FCD+Pipeline+Automation;Observability+%7C+Prometheus+%2B+Grafana+%2B+Alertmanager" />
@@ -46,31 +52,52 @@
 
 <table align="center">
 <tr>
-<td align="center" width="33%">
 
-### 🏗️ **Infrastructure**
+<td align="center" valign="top" width="33%">
 
-- ✅ AWS VPC (Public/Private Subnets)
-- ✅ EKS Cluster + Node Groups
-- ✅ NAT Gateway + Internet Gateway
-- ✅ ALB Ingress Controller
-- ✅ Route 53 + ACM (TLS)
-- ✅ Cluster Autoscaler
+### 🏗️ **Infrastructure (AWS & Kubernetes)**
+
+- ✅ AWS VPC (Public & Private Subnets)
+- ✅ Internet Gateway & NAT Gateway
+- ✅ Amazon EKS Cluster
+- ✅ Managed Node Groups (Auto Scaling)
+- ✅ AWS ALB Ingress Controller
+- ✅ Route 53 + ACM (TLS Certificates)
 
 </td>
-<td align="center" width="33%">
 
-### ⚙️ **CI/CD Pipeline**
+<td align="center" valign="top" width="33%">
 
-- ✅ GitHub Actions
-- ✅ Docker Tag & Push (ECR)
-- ✅ Trivy (Vuln + Secrets)
+### ⚙️ **CI / DevSecOps Pipeline**
+
+- ✅ GitHub Actions (CI Orchestration)
+- ✅ Docker Build, Tag & Push
+- ✅ Amazon ECR (Image Registry)
+- ✅ Trivy (Vulnerability & Secrets Scan)
 - ✅ OWASP Dependency-Check
-- ✅ SonarQube (Self-Hosted)
-- ✅ Reports → Artifacts + S3
+- ✅ SonarQube (Static Code Analysis)
+- ✅ Reports as Artifacts + S3
 
 </td>
-<td align="center" width="33%">
+
+<td align="center" valign="top" width="33%">
+
+### 🔄 **CD & GitOps (Runtime)**
+
+- ✅ GitOps-based Deployment
+- ✅ Auto Manifest Update (Image Tags)
+- ✅ GitOps Branch per Pipeline Run
+- ✅ ArgoCD Auto-Sync
+- ✅ Self-Healing & Pruning
+- ✅ Rollback via Git History
+- ✅ Cluster Autoscaler (Runtime Scaling)
+
+</td>
+
+</tr>
+</table>
+
+---
 
 ### 🔄 **GitOps**
 
@@ -389,6 +416,13 @@ Once the Docker image is available in Amazon ECR, the CI/CD pipeline automatical
 ```
 Scan → Tag → Push → Update Manifest → ArgoCD Sync → Deploy
 ```
+
+<p align="center">
+  <img src="images/screenshots/pipeline-results.png" alt="CI/CD Pipeline Results"/>
+</p>
+
+---
+
 ### 🔁 Pipeline Responsibilities
 
 | Step | Action | Tool |
@@ -418,6 +452,19 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
+### 📂 ArgoCD Namespace
+
+The ArgoCD namespace contains the controllers responsible for GitOps synchronization and application deployment.
+
+```bash
+kubectl get ns | grep argocd
+```
+
+<p align="center"> 
+  <img src="images/screenshots/argocd-namespace.jpg" alt="ArgoCD Namespace"/> 
+</p> 
+
+---
 
 ## 🔐 Step 8: Configure GitHub Secrets
 
@@ -706,13 +753,47 @@ At this stage:
 > [!TIP]
 > Click on the links below to explore the detailed technical documentation.
 
-* 📘 **[Setup Guide](./docs/setup.md)** – Cluster & infrastructure provisioning steps.
-* 🔧 **[Configuration](./docs/config.md)** – Detailed CI/CD and GitOps settings.
-* 🏗️ **[Architecture](./docs/arch.md)** – System design and workflow explanation.
-* 🔒 **[Security](./docs/security.md)** – Hardening practices and tool configurations.
+* 🏗️ **Architecture Diagram (Draw.io)**  
+ 👉 [View Kubernetes Architecture Diagram (PDF)](docs/architecture/k8s-architecture.drawio.pdf)
 
 ---
 
+## 👥 Project Team
+
+This project was developed as a collaborative **DevOps Graduation Project**, with contributions from the following team members:
+
+<table>
+<tr>
+<td align="center">
+
+### 👨‍💻 Mostafa Ghetta  
+🔗 [GitHub Profile](https://github.com/mostafagheta)
+
+</td>
+<td align="center">
+
+### 👨‍💻 Marwan Alaa  
+🔗 [GitHub Profile](https://github.com/marwanalaa8)
+
+</td>
+<td align="center">
+
+### 👩‍💻 Sohila Hosam  
+🔗 [GitHub Profile](https://github.com/sohila12)
+
+</td>
+<td align="center">
+
+### 👩‍💻 Nouran Mahmoud  
+🔗 [GitHub Profile](https://github.com/nouranmahmoud123)
+
+</td>
+</tr>
+</table>
+
+> 🤝 This collaboration reflects real-world DevOps teamwork, including CI/CD, GitOps workflows, infrastructure automation, and monitoring responsibilities.
+
+---
 ## 🤝 Acknowledgments
 
 > [!IMPORTANT]
@@ -733,21 +814,6 @@ This project represents a complete, **Production-Grade** implementation of moder
 <div align="center">
 
 ### 🌟 Star this repository if you found it helpful!
-**Mostafa Gheta**
-[GitHub Profile](https://github.com/mostafagheta)
-
-
-**Marwan Alaa**
-[GitHub Profile](https://github.com/marwanalaa8)
-
-
-**Sohila Hosam**
-[GitHub Profile](https://github.com/sohila12)
-
-
-**Nouran Mahmoud**
-[GitHub Profile](https://github.com/nouranmahmoud123)
-
 
 ![Production Ready](https://img.shields.io/badge/Status-Production_Ready-success?style=for-the-badge)
 ![Maintained](https://img.shields.io/badge/Maintained-Yes-green?style=for-the-badge)
