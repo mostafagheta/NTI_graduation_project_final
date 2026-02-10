@@ -2,10 +2,7 @@ name: Full DevSecOps Pipeline (Mirror + Trivy + Sonar + OWASP + Notify)
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - "Kubernetes/deployment.yml"
+
 
 permissions:
   contents: write

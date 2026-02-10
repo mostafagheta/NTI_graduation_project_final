@@ -2,12 +2,7 @@ name: Mirror Netflix Clone Image to DockerHub (Pull → Scan → Push)
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/dockerhub-mirror-netflix.yml"
-      - "docs/**"
-      - "README.md"
+
 
 concurrency:
   group: dockerhub-mirror-${{ github.ref }}
